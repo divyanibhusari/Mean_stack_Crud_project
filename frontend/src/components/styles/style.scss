@@ -1,0 +1,87 @@
+
+// login page start
+
+.login-page {
+   width: 100vw;
+   height: 100vh;
+   background-color: var(--bs-dark);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+   .main-login-form {
+       max-width: 500px;
+       width: 100%;
+       padding: 4rem 2rem;
+
+       background: rgba(0, 0, 0, 0.41);
+       border-radius: 16px;
+       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+       backdrop-filter: blur(12.8px);
+       -webkit-backdrop-filter: blur(12.8px);
+       border: 1px solid rgba(0, 0, 0, 0.37);
+
+       display: flex;
+       gap: 1rem;
+       flex-direction: column;
+
+       > .login-form{
+           display: flex;
+           flex-direction: column;
+           gap: 1rem;
+
+           > .login-form-input{
+
+               display: flex;
+               flex-direction: column;
+               gap: .5rem;
+
+               position: relative;
+
+               label{
+                   color: var(--bs-light);
+               }
+
+               input{
+                   background-color: transparent;
+                   outline: none;
+                   border: none;
+                   border-bottom: 1px solid var(--bs-light);
+                   color: var(--bs-light);
+                   
+                   &:focus{
+                   color: var(--bs-light);
+                   }
+
+               }
+           }
+
+       }
+
+   }
+
+}
+
+#alert{
+   position: absolute;
+   left: 50%;
+   top: 10%;
+   transform: translateX(-50%);
+}
+
+// login page end
+
+// page404
+.page404{
+   background-color: black;
+   color: rgb(227, 156, 23);
+}
+
+// dashboard
+
+.form-page{
+   width: 100vw;
+   height: 40vh;
+
+   background-color: black;
+}
