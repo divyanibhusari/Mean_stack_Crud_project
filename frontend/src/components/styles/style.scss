@@ -78,10 +78,16 @@
 }
 
 // dashboard
-
+.navbar-nav{
+    z-index: 999999;
+}
 .form-page{
    width: 100vw;
    height: 40vh;
 
    background-color: black;
+  .form-btn{
+   position: sticky;
+   
+  }
 }

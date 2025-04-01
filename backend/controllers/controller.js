@@ -67,5 +67,5 @@ let AddEntry = (req, res) => {
     console.log("This is get form data succefully !")
     console.log(req.body)
    
-}
+}   
 export { getHome, adminLogin, getDashboard, getPost, AddEntry }

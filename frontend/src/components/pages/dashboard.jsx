@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
 import Data from "../personal.js";
+
 const Dashboard = () => {
     let [formData, setformData] = useState({
         name: "",
@@ -9,7 +10,7 @@ const Dashboard = () => {
         email: "",
         dob: "",
         address: "",
-        student: ""
+        student: false
 
     })
     let [data, setData] = useState([])
@@ -83,6 +84,7 @@ const Dashboard = () => {
             setEmail(dt[0].email)
             setDob(dt[0].dob)
             setAddress(dt[0].address)
+            setStudent(dt[0].student === 'yes')
 
         }
 
@@ -103,23 +105,32 @@ const Dashboard = () => {
         if (name === '')
             error += 'first name is required ,'
 
-        if (name >= 11 )
+        if (phone === '')
             error += 'phone is required , '
 
-        if (name === '')
+        if (email === '')
             error += 'email is required ,'
 
-        if (name === '')
+        if (dob === '')
             error += 'dob is required ,'
 
-        if (name === '')
+        if (address === '')
             error += 'address is required '
+
+        // if(student === '')
+        //     error += 'student is required'
+
+        // Check for duplicate email or phone number
+        const isDuplicate = data.some(item => item.email === email || item.phone === phone);
+        if (isDuplicate) {
+            error += 'Duplicate email or phone number found.';
+        }
 
         if (error === '') {
 
 
             e.preventDefault()
-            let dt = [...data]
+            
             let newObject = {
                 id: Data.length + 1,
                 name: name,
@@ -127,32 +138,62 @@ const Dashboard = () => {
                 email: email,
                 dob: dob,
                 address: address,
-                student: student
+                student: student ? 'True' : 'False'
             }
-            dt.push(newObject)
-            setData(dt)
+            // dt.push(newObject)
+            setData([...data, newObject])
+            handleReset()
 
-           
 
-        }else{
+        } else {
             alert(error)
         }
+
+
+
     }
 
+    // let handleUpdate = () => {
+    //     let index = data.map((item) => {
+    //         return item.id
+    //     }).indexOf(id)
+    //     let dt = [...data]
+    //     dt[index].name = name
+    //     dt[index].phone = phone
+    //     dt[index].email = email
+    //     dt[index].dob = dob
+    //     dt[index].address = address
+    //     dt[index].student = student ? 'true' : 'false'
+    //     setData(dt)
+    //     handleReset()
+    // }
     let handleUpdate = () => {
-        let index = data.map((item) => {
-            return item.id
-        }).indexOf(id)
-        let dt = [...data]
-        dt[index].name = name
-        dt[index].phone = phone
-        dt[index].email = email
-        dt[index].dob = dob
-        dt[index].address = address
-
-        setData(dt)
-        handleReset()
-    }
+        let index = data.findIndex(item => item.id === id);
+        if (index !== -1) {
+            let existingItem = data[index];
+    
+            // Check for duplicate email or phone
+            const isDuplicate = data.some(item => (item.email === email || item.phone === phone) && item.id !== existingItem.id);
+    
+            if (isDuplicate) {
+                alert('Duplicate email or phone number found.');
+            } else {
+                let updatedData = [...data];
+                updatedData[index] = {
+                    id,
+                    name,
+                    phone,
+                    email,
+                    dob,
+                    address,
+                    student: student ? 'True' : 'False'
+                };
+                setData(updatedData); // Update the data state
+                handleReset(); // Reset the form after updating
+            }
+        }
+    };
+    
 
     let handleReset = () => {
         setId(id)
@@ -161,17 +202,19 @@ const Dashboard = () => {
         setEmail('')
         setDob('')
         setAddress('')
+        setStudent(false)
         setUpdate(false)
+        
     }
     return (
         <>
 
-
-            <nav className="navbar p-2  ">
-                <h1 className="taxt-warning px-2">welcome to dashboard</h1>
-                <button className="btn btn-warning " onClick={handleLogout}>Logout</button>
-            </nav>
-
+            <div className="navbar-nav">
+                <nav className="navbar p-2  ">
+                    <h1 className="taxt-warning px-2">welcome to dashboard</h1>
+                    <button className="btn btn-warning " onClick={handleLogout}>Logout</button>
+                </nav>
+            </div>
 
             <div className="form-page  p-5 d-flex justify-content-center align-items-center gap-2 flex-column ">
                 <h3 className="text-light p-3">Add Entry Form </h3>
@@ -193,11 +236,11 @@ const Dashboard = () => {
                             <input className="form-control" onChange={(e) => setAddress(e.target.value)} type="address" placeholder="Enter the address" name="address" value={address} />
                         </div>
                         <div className="col-4 pt-3 form d-flex justify-content-center align-items-center gap-2">
-                            <label htmlFor="" className="text-light fs-3"> Student </label><input onChange={(e) => setStudent(e.target.value)} className="text-danger" type="checkbox" name="student" value={student} />
+                            <label htmlFor="" className="text-light fs-3"> Student </label><input className="text-danger" onChange={(e)=> setStudent(e.target.checked)} type="checkbox" name="student" checked={student} />
 
                         </div>
                     </div>
-                    <div className="d-flex gap-2 justify-content-center align-items-center py-4">
+                    <div className="form-btn d-flex gap-2 justify-content-center align-items-center py-4 z-3">
                         {
                             !isupdate ?
                                 <button className="btn btn-success" onClick={(e) => handleSave(e)}>Submit </button>
